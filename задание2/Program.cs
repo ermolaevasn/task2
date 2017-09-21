@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace задание2
 {
@@ -10,21 +7,72 @@ namespace задание2
     {
         static void Main(string[] args)
         {
-            int M, N;
-            Console.WriteLine("Требуется ввести размер шахматной доски M x N ");
-            Console.WriteLine("Введите координату M");
+            int M, N,//размер доски
+                a=0,b=0,//координаты проигрышных ситуаций
+                kol=0;//счетчик для проигрышных координат
+            int[,] mas = new int[270,270];//массив для хранения выигрышных и проигрышных ситуаций
+            Console.WriteLine("Требуется ввести размер шахматной доски M x N ");//ввод размеров доски с проверкой
+            Console.WriteLine("Введите координату M (0<M<250)");
             Vvod("координата M = ", out M);
             Proverka("координата M", ref M);
-            Console.WriteLine("Введите координату N");
+            Console.WriteLine("Введите координату N (0<N<250)");
             Vvod("координата N = ", out N);
             Proverka("координата N", ref N);
 
-            if (M == N) Console.WriteLine("Выиграет ПЕРВЫЙ игрок");
-            else
-                if ((M == 2) && (N == 3) || (M == 3) && (N == 2)) Console.WriteLine("Выиграет ВТОРОЙ игрок");
-            else if ((M % 2==0)&&(N % 2 == 0)) Console.WriteLine("Выиграет ВТОРОЙ игрок");
+            for (int i = 0; i < 250; i++)//заполняем массив единицами(выиграет 1 игрок)
+                for (int j = 0; j < 250; j++)
+                    mas[i, j] = 1;
+
+            for (int i=0;i<20;i++)//заполняем проигрышные ситуации(для 1 игрока) двойками
+            {
+                a += 2;
+                kol++;
+                b = a - kol;
+                mas[a, b] = 2;
+                mas[b, a] = 2;
+
+                a += 3;
+                kol++;
+                b = a - kol;
+                mas[a, b] = 2;
+                mas[b, a] = 2;
+
+                a += 2;
+                kol++;
+                b = a - kol;
+                mas[a, b] = 2;
+                mas[b, a] = 2;
+
+                a += 3;
+                kol++;
+                b = a - kol;
+                mas[a, b] = 2;
+                mas[b, a] = 2;
+
+                a += 3;
+                kol++;
+                b = a - kol;
+                mas[a, b] = 2;
+                mas[b, a] = 2;
+            }
+            //ЕСЛИ НЕОБХОДИМО ВЫВЕСТИ МАТРИЦУ С ВЫИГРЫШНЫМИ СИТУАЦИЯМИ
+
+            //for (int i = 0; i < 25; i++)
+            //{
+            //    for (int j = 0; j < 25; j++)
+            //    {
+            //        if(mas[i,j]==2) Console.ForegroundColor = ConsoleColor.Green;
+            //        Console.Write(mas[i, j]+"   ");
+            //        Console.ResetColor();
+            //    }
+            //    Console.WriteLine();
+            //}
+
+            //КОНЕЦ ВЫВОДА МАТРИЦЫ
+
+            if (mas[M - 1, N - 1] == 2) Console.WriteLine("Выиграет ВТОРОЙ игрок");//вывод результатов
             else Console.WriteLine("Выиграет ПЕРВЫЙ игрок");
-            Console.ReadKey();
+            Console.ReadKey();  
         }
         static double Vvod(string s, out int n)//ввод числа
         {
@@ -45,7 +93,7 @@ namespace задание2
             string buf;
             do
             {
-                if (a > 0) ok = true;
+                if ((a > 0)&&((a < 251))) ok = true;
                 else
                 {
                     if (!ok) Console.WriteLine("\aВведите " + s + " заново");
